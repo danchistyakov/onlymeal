@@ -32,6 +32,8 @@ exports.Scheduler = async (bot, msg, chatId, interval, obj, cancel) => {
 
             const months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
 
+            bot.sendMessage(chatId, `<b>Время на сервере</b>\n${date.getDate() + 1} ${months[date.getMonth()]} ${date.getHours()}:${date.getMinutes()}`, { parse_mode: "HTML" });
+
             if (date.getHours() > 19) {
                 bot.sendMessage(chatId, `<b>Следующее блюдо</b>\n${date.getDate() + 1} ${months[date.getMonth()]} 10:00`, { parse_mode: "HTML" });
             } else {
