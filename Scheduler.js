@@ -7,7 +7,7 @@ exports.Scheduler = async (bot, msg, chatId, interval, obj, cancel) => {
 
     if (interval === '3td') {
         if (cancel === true) {
-            bot.sendPhoto(chatId, 'https://ik.imagekit.io/onlymeal/Frame_26options_zMmm82QbF.png', {
+            await bot.sendPhoto(chatId, 'https://ik.imagekit.io/onlymeal/Frame_26options_zMmm82QbF.png', {
                 caption: '<b>3 раза в день</b> ✅\nИменно столько раз мы будем присылать тебе что поесть!',
                 parse_mode: "HTML",
                 reply_to_message_id: msg.message_id,
@@ -31,8 +31,6 @@ exports.Scheduler = async (bot, msg, chatId, interval, obj, cancel) => {
             })
 
             const months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
-
-            bot.sendMessage(chatId, `<b>Время на сервере</b>\n${date.getDate() + 1} ${months[date.getMonth()]} ${date.getHours()}:${date.getMinutes()}`, { parse_mode: "HTML" });
 
             if (date.getHours() > 19) {
                 bot.sendMessage(chatId, `<b>Следующее блюдо</b>\n${date.getDate() + 1} ${months[date.getMonth()]} 10:00`, { parse_mode: "HTML" });
