@@ -13,7 +13,8 @@ const { Message } = require('./Messages');
 require('./models');
 //const Amplitude = require('@amplitude/node');
 const mongoose = require('mongoose');
-console.log(process.env.TZ);
+console.log(typeof process.env.PRODUCTION);
+console.log(process.env.PRODUCTION);
 const MONGODB_URI = 'mongodb+srv://onlymeal:qfGjhhjkmrJ1@onlymeal.wj7vo.mongodb.net/onlymeal?retryWrites=true&w=majority';
 
 const Preferences = mongoose.model('preferences');
