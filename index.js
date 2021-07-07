@@ -1,6 +1,5 @@
 const TelegramApi = require('node-telegram-bot-api');
-//const token = '1797063882:AAGUc2f0xS5C7PgAZ8_xINGcA1u6f7wKd_I';
-const token = '1757466123:AAHZci-uxpsBBzSVDO-zJLjRuE43c4ODGkc';
+const token = process.env.PRODUCTION === 'true' ? '1797063882:AAGUc2f0xS5C7PgAZ8_xINGcA1u6f7wKd_I' : '1757466123:AAHZci-uxpsBBzSVDO-zJLjRuE43c4ODGkc';
 const bot = new TelegramApi(token, { polling: true });
 const schedule = require('node-schedule');
 const { mainKeyboard } = require('./keyboards');
@@ -13,8 +12,7 @@ const { Message } = require('./Messages');
 require('./models');
 //const Amplitude = require('@amplitude/node');
 const mongoose = require('mongoose');
-console.log(typeof process.env.PRODUCTION);
-console.log(process.env.PRODUCTION);
+
 const MONGODB_URI = 'mongodb+srv://onlymeal:qfGjhhjkmrJ1@onlymeal.wj7vo.mongodb.net/onlymeal?retryWrites=true&w=majority';
 
 const Preferences = mongoose.model('preferences');
