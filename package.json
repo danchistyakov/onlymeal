@@ -12,6 +12,8 @@
     "dependencies": {
         "@amplitude/node": "^1.6.1",
         "googleapis": "^76.0.0",
+        "mongoose": "^5.13.0",
+        "mongoose-unique-validator": "^2.0.3",
         "node-schedule": "^2.0.0",
         "node-telegram-bot-api": "^0.53.0",
         "pg": "^8.6.0",

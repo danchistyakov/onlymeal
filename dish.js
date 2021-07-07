@@ -1,7 +1,7 @@
 const { DishSearch } = require('./dishSearch');
 const { mainKeyboard } = require('./keyboards');
 
-exports.Dish = async (bot, chatId, obj, msg) => {
+exports.Dish = async (bot, obj, msg) => {
     const answer = await DishSearch(JSON.parse(obj?.like), JSON.parse(obj?.hate));
 
     if (answer !== 'К сожалению, на данный момент по Вашим фильтрам мы ничего не можем Вам предложить 😔') {
@@ -25,7 +25,7 @@ exports.Dish = async (bot, chatId, obj, msg) => {
             {
                 mainKeyboard,
                 inline_keyboard: [
-                    [{ text: 'Вернуться к фильтрам ⬅️', callback_data: 'setRation' }],
+                    [{ text: '⬅️ Вернуться к фильтрам', callback_data: 'setRation' }],
                 ]
             }
         });

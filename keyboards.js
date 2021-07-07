@@ -2,7 +2,7 @@ module.exports = {
 
     rationKeyboard: JSON.stringify({
         inline_keyboard: [
-            [{ text: 'Настроить рацион', callback_data: 'setRation' }]
+            [{ text: 'Поехали!', callback_data: 'setRation' }]
         ]
     }),
 
