@@ -5,7 +5,6 @@ const { DishSearch } = require('./dishSearch');
 const { handleHateKeyboard, handleMeatKeyboard, handleJunkKeyboard, handleIntervalKeyboard } = require('./handleKeyboards');
 const { mainKeyboard } = require('./keyboards');
 
-
 exports.Message = async (bot, chatId, text) => {
     const Preferences = mongoose.model('preferences');
 
