@@ -76,7 +76,7 @@ exports.handleIntervalKeyboard = (data) => {
             data === '3td' ? [{ text: 'Хочу 3 раза в день ✅', callback_data: '3td' }] : [{ text: 'Хочу 3 раза в день', callback_data: '3td' }],
             data === '1td' ? [{ text: 'Раз в день ✅', callback_data: '1td' }] : [{ text: 'Раз в день', callback_data: '1td' }],
             data === '1tw' ? [{ text: 'Раз в неделю ✅', callback_data: '1tw' }] : [{ text: 'Раз в неделю', callback_data: '1tw' }],
-            data === 'onreq' ? [{ text: 'Когда захочу! Дайте кнопку 🔴 ✅', callback_data: 'onreq' }] : [{ text: 'Когда захочу! Дайте кнопку 🔴', callback_data: 'onreq' }],
+            data === 'button' ? [{ text: 'Когда захочу! Дайте кнопку 🔴 ✅', callback_data: 'button' }] : [{ text: 'Когда захочу! Дайте кнопку 🔴', callback_data: 'button' }],
             [{ text: 'Далее ➡️', callback_data: 'intervalConfirm' }],
         ]
     }

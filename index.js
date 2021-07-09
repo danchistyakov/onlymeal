@@ -5,10 +5,11 @@ const schedule = require('node-schedule');
 const { mainKeyboard } = require('./keyboards');
 const { handleHateKeyboard, handleMeatKeyboard, handleJunkKeyboard, handleIntervalKeyboard } = require('./handleKeyboards');
 const { Scheduler } = require('./Scheduler');
-const { DishSearch } = require('./dishSearch');
+const { Dish } = require('./dish');
 const { sendRating } = require('./sendRating');
-const { Message } = require('./Messages');
-//const sequelize = require('./db');
+const { Message } = require('./messages');
+const { Cancel } = require('./canceller');
+
 require('./models');
 //const Amplitude = require('@amplitude/node');
 const mongoose = require('mongoose');
@@ -18,17 +19,6 @@ const MONGODB_URI = 'mongodb+srv://onlymeal:qfGjhhjkmrJ1@onlymeal.wj7vo.mongodb.
 const Preferences = mongoose.model('preferences');
 
 //const client = Amplitude.init('f05658fc1d0cc2d7ffb26803b28c00a8');
-
-const sendTime = (time, msg, text) => {
-    new schedule.scheduleJob(`*/${time} * * * *`, function () {
-        bot.sendMessage(msg.chat.id, text);
-    });
-}
-
-const subCancel = () => {
-    job.cancel();
-    bot.sendMessage(msg.chat.id, 'Отменил');
-}
 
 process.on('SIGINT', function () {
     mongoose.connection.close(function () {
@@ -76,11 +66,11 @@ const start = async () => {
         const data = msg.data;
         const chatId = msg.message.chat.id;
         const messageId = msg.message.message_id;
-        const dbdata = await Preferences.findOne({ chatId: chatId }).exec();
-        hate = hate === undefined ? dbdata.toObject()?.hate : hate;
-        meat = meat === undefined ? dbdata.toObject()?.meat : meat;
+        const dbdata = (await Preferences.findOne({ chatId: chatId }).exec()).toObject();
+        hate = hate === undefined ? dbdata?.hate : hate;
+        meat = meat === undefined ? dbdata?.meat : meat;
         junk = junk === undefined ? dbdata?.junk : junk;
-        interval = interval === undefined ? dbdata.toObject()?.interval : interval;
+        interval = interval === undefined ? dbdata?.interval : interval;
 
         if (data === 'setRation' || data === 'hateBack') {
             bot.sendPhoto(chatId, 'https://cdn.statically.io/img/tangerine.gq/q=91/onlymeal/dislike.jpg',
@@ -143,50 +133,24 @@ const start = async () => {
                 });
         }
 
-        if (['3td', '1td', '1tw', 'onreq'].includes(data) && data !== interval) {
+        if (['3td', '1td', '1tw', 'button'].includes(data) && data !== interval) {
             interval = data;
+            await Preferences.findOneAndUpdate({ chatId: chatId }, { interval: data });
             bot.editMessageReplyMarkup(handleIntervalKeyboard(data), { message_id: messageId, chat_id: chatId })
         }
 
-        if (data === 'intervalConfirm') {
-            const cancel = true;
-            Scheduler(bot, msg, chatId, interval, cancel);
+        if (data === 'intervalConfirm' && interval !== 'button') {
+            Scheduler(bot, msg, dbdata, interval);
         }
 
-        /*if (data === 'handleStop') {
-            const cancel = false;
-            Scheduler(bot, msg, chatId, obj.interval, obj, cancel);
+        if (data === 'intervalConfirm' && interval === 'button') {
+            Dish(bot, dbdata, msg);
         }
-        
-        if (data === 'handleTry') {
-            const answer = await DishSearch(JSON.parse(obj?.like), JSON.parse(obj?.hate));
-            if (answer !== 'К сожалению, на данный момент по Вашим фильтрам мы ничего не можем Вам предложить 😔') {
-                bot.sendPhoto(chatId, 'https://ik.imagekit.io/onlymeal/Frame_26options_zMmm82QbF.png', {
-                    caption: answer.meal,
-                    reply_to_message_id: msg.message_id,
-                    reply_markup:
-                    {
-                        mainKeyboard,
-                        inline_keyboard: [
-                            [{ text: 'Скушано ✅', callback_data: 'handleRate' + answer.key }],
-                            [{ text: 'Больше не присылать ✅', callback_data: 'handleStop' }],
-                        ]
-                    }
-                });
-            } else {
-                bot.sendPhoto(chatId, 'https://ik.imagekit.io/onlymeal/Frame_26options_zMmm82QbF.png', {
-                    caption: answer,
-                    reply_to_message_id: msg.message_id,
-                    reply_markup:
-                    {
-                        mainKeyboard,
-                        inline_keyboard: [
-                            [{ text: 'Вернуться к фильтрам ⬅️', callback_data: 'setRation' }],
-                        ]
-                    }
-                });
-            }
-        }*/
+
+        if (data === 'stopSending') {
+            Cancel();
+            bot.sendMessage(chatId, 'Нам жаль, что вы уходите :( Может смените расписание рассылки?');
+        }
 
         if (data.indexOf('handleRate') !== -1) {
             const key = Number(data.slice(10));
