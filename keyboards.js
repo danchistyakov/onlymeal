@@ -12,5 +12,13 @@ module.exports = {
             ['Блюдо прямо сейчас! 😋'],
             ['Расписание ⏰', 'Рацион'],
         ]
+    }),
+
+    geoKeyboard: JSON.stringify({
+        resize_keyboard: true,
+        keyboard: [
+            [{ text: '🗺 Геопозиция', request_location: true }],
+            ['❌ Отмена'],
+        ]
     })
 }

@@ -1,15 +1,15 @@
 const TelegramApi = require('node-telegram-bot-api');
 const token = process.env.PRODUCTION === 'true' ? '1797063882:AAGUc2f0xS5C7PgAZ8_xINGcA1u6f7wKd_I' : '1757466123:AAHZci-uxpsBBzSVDO-zJLjRuE43c4ODGkc';
 const bot = new TelegramApi(token, { polling: true });
-const schedule = require('node-schedule');
-const { mainKeyboard } = require('./keyboards');
+var CronJob = require('cron').CronJob;
+const { mainKeyboard, geoKeyboard } = require('./keyboards');
 const { handleHateKeyboard, handleMeatKeyboard, handleJunkKeyboard, handleIntervalKeyboard } = require('./handleKeyboards');
 const { Scheduler } = require('./Scheduler');
 const { Dish } = require('./dish');
 const { sendRating } = require('./sendRating');
 const { Message } = require('./messages');
 const { Cancel } = require('./canceller');
-
+const { Timezone } = require('./timezone');
 require('./models');
 //const Amplitude = require('@amplitude/node');
 const mongoose = require('mongoose');
@@ -54,6 +54,24 @@ const start = async () => {
             console.log('Existing user')
         }
         Message(bot, msg.chat.id, msg.text)
+
+        if (msg.text === 'timetable') {
+            bot.sendMessage(msg.chat.id, '🌐 Текущий часовой пояс: UTC+03:00\n🛠 Введите название вашего города (на английском) или ваш часовой пояс в формате ±ЧЧ:ММ.\n🗺 Или отправьте свою геопозицию.',
+                {
+                    parse_mode: "HTML",
+                    reply_markup: geoKeyboard
+                });
+        }
+        console.log(msg)
+
+        if (msg.location !== undefined) {
+            bot.sendMessage(msg.chat.id, `🌐 Ваш часовой пояс: UTC${await Timezone(msg.location.latitude, msg.location.longitude)}`,
+                {
+                    parse_mode: "HTML",
+                    reply_markup: geoKeyboard
+                });
+        }
+
     });
 
     //return bot.sendMessage(chatId, 'Извините, непонятно', { parse_mode: "HTML" });

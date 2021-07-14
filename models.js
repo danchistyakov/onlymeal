@@ -27,6 +27,10 @@ const PreferencesSchema = mongoose.Schema({
 
     junk: { type: Boolean },
     interval: { type: String },
+    timezone: {
+        offset: { type: Number, required: true, default: 10800 },
+        timeZoneId: { type: String, required: true, default: 'Europe/Moscow' },
+    }
 })
 
 PreferencesSchema.plugin(uniqueValidator);

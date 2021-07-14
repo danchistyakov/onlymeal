@@ -1,4 +1,4 @@
-const schedule = require('node-schedule');
+var CronJob = require('cron').CronJob;
 const { mainKeyboard } = require('./keyboards');
 const { Dish } = require('./dish');
 const { Cancel } = require('./canceller');
@@ -18,33 +18,24 @@ exports.Scheduler = async (bot, msg, dbdata, interval) => {
 
         Cancel();
 
-        schedule.scheduleJob({ hour: 10, minute: 00 }, async () => {
+        const job1 = new CronJob('00 00 10 * * *', () => {
             Dish(bot, dbdata, msg);
-            ////////////////////////////////////////////////////////////////
-            const cancel = schedule.scheduledJobs;
-            for (i = 0; i < Object.keys(cancel).length; i++) {
-                console.log(cancel[Object.keys(cancel)[i]].nextInvocation())
-            }
         })
 
-        schedule.scheduleJob({ hour: 14, minute: 00 }, async () => {
+        job1.start()
+
+        const job2 = new CronJob('00 00 14 * * *', () => {
             Dish(bot, dbdata, msg);
-            ////////////////////////////////////////////////////////////////
-            const cancel = schedule.scheduledJobs;
-            for (i = 0; i < Object.keys(cancel).length; i++) {
-                console.log(cancel[Object.keys(cancel)[i]].nextInvocation())
-            }
         })
 
-        schedule.scheduleJob({ hour: 20, minute: 00 }, async () => {
+        job2.start()
+
+        const job3 = new CronJob('00 00 20 * * *', () => {
             Dish(bot, dbdata, msg);
-            ////////////////////////////////////////////////////////////////
-            const cancel = schedule.scheduledJobs;
-            for (i = 0; i < Object.keys(cancel).length; i++) {
-                console.log(cancel[Object.keys(cancel)[i]].nextInvocation())
-                console.log('NO MORE TASKS')
-            }
         })
+
+        job3.start()
+
 
         if (date.getHours() > 19 || date.getHours() < 10) {
             date.getHours() > 19 && date.setDate(date.getDate() + 1);
@@ -70,14 +61,11 @@ exports.Scheduler = async (bot, msg, dbdata, interval) => {
 
         Cancel();
 
-        schedule.scheduleJob({ hour: 10, minute: 00 }, async () => {
+        const job1 = new CronJob('00 00 10 * * *', () => {
             Dish(bot, dbdata, msg);
-            const cancel = schedule.scheduledJobs;
-            for (i = 0; i < Object.keys(cancel).length; i++) {
-                console.log(cancel[Object.keys(cancel)[i]].nextInvocation())
-                console.log('NO MORE TASKS')
-            }
         })
+
+        job1.start()
 
         if (date.getHours() > 10) {
             date.setDate(date.getDate() + 1);
@@ -97,14 +85,11 @@ exports.Scheduler = async (bot, msg, dbdata, interval) => {
 
         Cancel();
 
-        schedule.scheduleJob({ hour: 10, minute: 00 }, async () => {
+        const job1 = new CronJob('00 00 10 /7 * *', () => {
             Dish(bot, dbdata, msg);
-            const cancel = schedule.scheduledJobs;
-            for (i = 0; i < Object.keys(cancel).length; i++) {
-                console.log(cancel[Object.keys(cancel)[i]].nextInvocation())
-                console.log('NO MORE TASKS')
-            }
         })
+
+        job1.start()
 
         date.setDate(date.getDate() + 7);
         bot.sendMessage(chatId, `<b>Следующее блюдо</b>\n${date.getDate()} ${months[date.getMonth()]} 10:00`, { parse_mode: "HTML" });

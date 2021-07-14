@@ -11,6 +11,8 @@
     "license": "ISC",
     "dependencies": {
         "@amplitude/node": "^1.6.1",
+        "axios": "^0.21.1",
+        "cron": "^1.8.2",
         "googleapis": "^76.0.0",
         "mongoose": "^5.13.0",
         "mongoose-unique-validator": "^2.0.3",
