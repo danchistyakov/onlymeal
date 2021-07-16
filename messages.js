@@ -1,13 +1,16 @@
 require('./models');
 const mongoose = require('mongoose');
-const { rationKeyboard } = require('./keyboards');
+const { rationKeyboard, geoKeyboard } = require('./keyboards');
 const { DishSearch } = require('./dishSearch');
 const { handleHateKeyboard, handleMeatKeyboard, handleJunkKeyboard, handleIntervalKeyboard } = require('./handleKeyboards');
-const { mainKeyboard } = require('./keyboards');
+const { mainKeyboard, UTCKeyboard } = require('./keyboards');
+const { Dish } = require('./dish');
+const { Timezone } = require('./timezone');
 
-exports.Message = async (bot, chatId, text) => {
+exports.Message = async (bot, msg) => {
     const Preferences = mongoose.model('preferences');
-
+    const chatId = msg.chat.id;
+    const text = msg.text;
     if (text === '/start') {
         const startSession = async () => {
             try {
@@ -41,41 +44,46 @@ exports.Message = async (bot, chatId, text) => {
             })
     }
 
-    if (text === 'Расписание ⏰') {
+    if (text === 'Расписание ⏰' || text === 'Расписание') {
+        bot.sendMessage(msg.chat.id, '🌐 Текущий часовой пояс: UTC+03:00\n🛠 Укажите ваш часовой пояс в формате ±ЧЧ:ММ.\n🗺 Или отправьте свою геопозицию.',
+            {
+                parse_mode: "HTML",
+                reply_markup: geoKeyboard
+            });
+    }
+
+    if (msg.location !== undefined) {
+        bot.sendMessage(msg.chat.id, `🌐 Ваш часовой пояс: UTC${await Timezone(msg.location.latitude, msg.location.longitude)}`,
+            {
+                parse_mode: "HTML",
+                reply_markup: UTCKeyboard
+            });
+    }
+
+    if (text.indexOf(':') !== -1) {
+        const hours = Number(text.slice(1, -3)) * 3600;
+        const minutes = Number(text.slice(4)) * 60;
+        await Preferences.findOneAndUpdate({ chatId: chatId }, { timezone: { offset: hours + minutes, timeZoneId: null } });
+        bot.sendMessage(msg.chat.id, `🌐 Ваш часовой пояс: UTC${text}`,
+            {
+                parse_mode: "HTML",
+                reply_markup: UTCKeyboard
+            });
+    }
+
+    /*if (text === 'Распиание ⏰') {
         const dbdata = (await Preferences.findOne({ chatId: chatId }, 'interval').exec()).toObject()?.interval;
         bot.sendPhoto(chatId, 'https://cdn.statically.io/img/tangerine.gq/q=91/onlymeal/schedule.jpg',
             {
                 caption: 'Хорошо, как часто мы будем выдавать тебе наши замечательные рецепты и идеи?',
                 reply_markup: handleIntervalKeyboard(dbdata),
-            });
-    }
+                });
+    }*/
 
     if (text === 'Блюдо прямо сейчас! 😋') {
-        const dbdata = await Preferences.findOne({ chatId: chatId }).exec();
-        const filters = Object.assign(dbdata?.toObject()?.hate, dbdata?.toObject()?.meat, { junk: dbdata?.toObject()?.junk });
-        const info = await DishSearch(filters);
-        if (info !== 'К сожалению, на данный момент по Вашим фильтрам мы ничего не можем Вам предложить 😔') {
-            bot.sendPhoto(chatId, 'https://ik.imagekit.io/onlymeal/Frame_26options_zMmm82QbF.png', {
-                caption: info.meal,
-                reply_markup:
-                {
-                    mainKeyboard,
-                    inline_keyboard: [
-                        [{ text: 'Скушано ✅', callback_data: 'handleRate' + info.key }],
-                    ]
-                }
-            });
-        } else {
-            bot.sendPhoto(chatId, 'https://ik.imagekit.io/onlymeal/Frame_26options_zMmm82QbF.png', {
-                caption: info,
-                reply_markup:
-                {
-                    mainKeyboard,
-                    inline_keyboard: [
-                        [{ text: '⬅️ Вернуться к фильтрам', callback_data: 'setRation' }],
-                    ]
-                }
-            });
-        }
+        const dbdata = (await Preferences.findOne({ chatId: chatId }).exec())?.toObject();
+        //const filters = Object.assign(dbdata?.hate, dbdata?.meat, { junk: dbdata?.junk });
+        //const info = await DishSearch(filters);
+        Dish(bot, dbdata, msg)
     }
 }

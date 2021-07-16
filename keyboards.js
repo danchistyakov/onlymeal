@@ -20,5 +20,11 @@ module.exports = {
             [{ text: '🗺 Геопозиция', request_location: true }],
             ['❌ Отмена'],
         ]
-    })
+    }),
+
+    UTCKeyboard: JSON.stringify({
+        inline_keyboard: [
+            [{ text: 'Далее ➡️', callback_data: 'intervalNext' }]
+        ]
+    }),
 }

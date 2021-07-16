@@ -7,6 +7,8 @@ exports.Scheduler = async (bot, msg, dbdata, interval) => {
     const chatId = msg.message.chat.id;
     const date = new Date();
     const months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+    const offsetRaw = dbdata?.timezone?.offset;
+    const offset = offsetRaw - 10800;
 
     if (interval === '3td') {
         await bot.sendPhoto(chatId, 'https://cdn.statically.io/img/tangerine.gq/q=91/onlymeal/3td.jpg', {
@@ -18,10 +20,10 @@ exports.Scheduler = async (bot, msg, dbdata, interval) => {
 
         Cancel();
 
-        const job1 = new CronJob('00 00 10 * * *', () => {
+        const job1 = new CronJob(`00 ${(offset % 3600) / 60} ${10 - Math.floor(offset / 3600)} * * * `, () => {
             Dish(bot, dbdata, msg);
         })
-
+        console.log(job1)
         job1.start()
 
         const job2 = new CronJob('00 00 14 * * *', () => {
@@ -39,13 +41,13 @@ exports.Scheduler = async (bot, msg, dbdata, interval) => {
 
         if (date.getHours() > 19 || date.getHours() < 10) {
             date.getHours() > 19 && date.setDate(date.getDate() + 1);
-            bot.sendMessage(chatId, `<b>Следующее блюдо</b>\n${date.getDate()} ${months[date.getMonth()]} 10:00`, { parse_mode: "HTML" });
+            bot.sendMessage(chatId, `<b> Следующее блюдо</b>\n${date.getDate()} ${months[date.getMonth()]} 10:00`, { parse_mode: "HTML" });
         } else {
             if (date.getHours() < 14) {
-                bot.sendMessage(chatId, `<b>Следующее блюдо</b>\n${date.getDate()} ${months[date.getMonth()]} 14:00`, { parse_mode: "HTML" });
+                bot.sendMessage(chatId, `<b> Следующее блюдо</b>\n${date.getDate()} ${months[date.getMonth()]} 14:00`, { parse_mode: "HTML" });
             } else {
                 if (date.getHours() < 20) {
-                    bot.sendMessage(chatId, `<b>Следующее блюдо</b>\n${date.getDate()} ${months[date.getMonth()]} 20:00`, { parse_mode: "HTML" });
+                    bot.sendMessage(chatId, `<b> Следующее блюдо</b>\n${date.getDate()} ${months[date.getMonth()]} 20:00`, { parse_mode: "HTML" });
                 }
             }
         }
@@ -69,9 +71,9 @@ exports.Scheduler = async (bot, msg, dbdata, interval) => {
 
         if (date.getHours() > 10) {
             date.setDate(date.getDate() + 1);
-            bot.sendMessage(chatId, `<b>Следующее блюдо</b>\n${date.getDate()} ${months[date.getMonth()]} 10:00`, { parse_mode: "HTML" });
+            bot.sendMessage(chatId, `< b > Следующее блюдо</b >\n${date.getDate()} ${months[date.getMonth()]} 10: 00`, { parse_mode: "HTML" });
         } else {
-            bot.sendMessage(chatId, `<b>Следующее блюдо</b>\n${date.getDate()} ${months[date.getMonth()]} 10:00`, { parse_mode: "HTML" });
+            bot.sendMessage(chatId, `< b > Следующее блюдо</b >\n${date.getDate()} ${months[date.getMonth()]} 10: 00`, { parse_mode: "HTML" });
         }
     }
 
@@ -92,6 +94,6 @@ exports.Scheduler = async (bot, msg, dbdata, interval) => {
         job1.start()
 
         date.setDate(date.getDate() + 7);
-        bot.sendMessage(chatId, `<b>Следующее блюдо</b>\n${date.getDate()} ${months[date.getMonth()]} 10:00`, { parse_mode: "HTML" });
+        bot.sendMessage(chatId, `< b > Следующее блюдо</b >\n${date.getDate()} ${months[date.getMonth()]} 10: 00`, { parse_mode: "HTML" });
     }
 }

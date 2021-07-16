@@ -53,24 +53,7 @@ const start = async () => {
         } catch (err) {
             console.log('Existing user')
         }
-        Message(bot, msg.chat.id, msg.text)
-
-        if (msg.text === 'timetable') {
-            bot.sendMessage(msg.chat.id, '🌐 Текущий часовой пояс: UTC+03:00\n🛠 Введите название вашего города (на английском) или ваш часовой пояс в формате ±ЧЧ:ММ.\n🗺 Или отправьте свою геопозицию.',
-                {
-                    parse_mode: "HTML",
-                    reply_markup: geoKeyboard
-                });
-        }
-        console.log(msg)
-
-        if (msg.location !== undefined) {
-            bot.sendMessage(msg.chat.id, `🌐 Ваш часовой пояс: UTC${await Timezone(msg.location.latitude, msg.location.longitude)}`,
-                {
-                    parse_mode: "HTML",
-                    reply_markup: geoKeyboard
-                });
-        }
+        Message(bot, msg)
 
     });
 
@@ -185,7 +168,7 @@ const start = async () => {
 
         if (data.indexOf('handleRating') !== -1) {
             const rate = Number(data.slice(-1));
-            const key = Number(data.slice(12, -1));
+            const key = Number(data.slice(12, -1)) + 1;
             sendRating(rate, key)
             bot.sendMessage(chatId, 'Спасибо за отзыв!', {
                 reply_markup: mainKeyboard,
