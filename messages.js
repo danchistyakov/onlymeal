@@ -82,8 +82,6 @@ exports.Message = async (bot, msg) => {
 
     if (text === 'Блюдо прямо сейчас! 😋') {
         const dbdata = (await Preferences.findOne({ chatId: chatId }).exec())?.toObject();
-        //const filters = Object.assign(dbdata?.hate, dbdata?.meat, { junk: dbdata?.junk });
-        //const info = await DishSearch(filters);
-        Dish(bot, dbdata, msg)
+        Dish(bot, dbdata, msg.chat.id);
     }
 }

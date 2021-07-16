@@ -36,8 +36,5 @@ exports.sendRating = async (rate, key) => {
         }
     }
 
-    //const meal = (await gsapi.spreadsheets.values.get(opt1)).data.values;
-    const response = (await gsapi.spreadsheets.values.batchUpdate(updateOptions)).data;
-    console.log(JSON.stringify(response, null, 2));
-
+    await gsapi.spreadsheets.values.batchUpdate(updateOptions);
 }

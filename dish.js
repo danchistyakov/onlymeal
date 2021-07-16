@@ -1,15 +1,8 @@
 const { DishSearch } = require('./dishSearch');
 const { mainKeyboard } = require('./keyboards');
 
-exports.Dish = async (bot, dbdata, msg) => {
+exports.Dish = async (bot, dbdata, chatId) => {
     const answer = await DishSearch(dbdata?.hate, dbdata?.meat, dbdata?.junk);
-    var chatId;
-
-    try {
-        chatId = msg.chat.id;
-    } catch (err) {
-        chatId = msg.message.chat.id;
-    }
 
     if (answer !== 'К сожалению, на данный момент по Вашим фильтрам мы ничего не можем Вам предложить 😔') {
         bot.sendPhoto(chatId, answer.image, {
@@ -18,15 +11,13 @@ exports.Dish = async (bot, dbdata, msg) => {
             {
                 mainKeyboard,
                 inline_keyboard: [
-                    [{ text: 'Скушано ✅', callback_data: 'handleRate' + answer.key }],
-                    [{ text: 'Больше не присылать ✅', callback_data: 'stopSending' }],
+                    [{ text: 'Съедено ✨', callback_data: 'handleRate' + answer.key }],
                 ]
             }
         });
     } else {
         bot.sendPhoto(chatId, 'https://ik.imagekit.io/onlymeal/Frame_26options_zMmm82QbF.png', {
             caption: answer,
-            reply_to_message_id: msg.message_id,
             reply_markup:
             {
                 mainKeyboard,

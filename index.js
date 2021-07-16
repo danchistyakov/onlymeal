@@ -10,6 +10,8 @@ const { sendRating } = require('./sendRating');
 const { Message } = require('./messages');
 const { Cancel } = require('./canceller');
 const { Timezone } = require('./timezone');
+const { initScheduler } = require('./initScheduler');
+
 require('./models');
 //const Amplitude = require('@amplitude/node');
 const mongoose = require('mongoose');
@@ -42,6 +44,8 @@ const start = async () => {
             console.log('Mongoose connected');
         }
     })
+
+    initScheduler(bot);
 
     bot.setMyCommands([
         { command: '/start', description: 'Начальное приветствие' },
@@ -141,11 +145,11 @@ const start = async () => {
         }
 
         if (data === 'intervalConfirm' && interval !== 'button') {
-            Scheduler(bot, msg, dbdata, interval);
+            Scheduler(bot, chatId, dbdata, interval, true);
         }
 
         if (data === 'intervalConfirm' && interval === 'button') {
-            Dish(bot, dbdata, msg);
+            Dish(bot, dbdata, chatId);
         }
 
         if (data === 'stopSending') {
