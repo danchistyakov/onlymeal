@@ -3,9 +3,9 @@ const { mainKeyboard } = require('./keyboards');
 
 exports.Dish = async (bot, dbdata, msg) => {
     const answer = await DishSearch(dbdata?.hate, dbdata?.meat, dbdata?.junk);
-    console.log(mainKeyboard)
+    console.log(msg)
 
-    const chatId = msg.message.chat.id;
+    const chatId = msg.chat.id;
     if (answer !== 'К сожалению, на данный момент по Вашим фильтрам мы ничего не можем Вам предложить 😔') {
         bot.sendPhoto(chatId, answer.image, {
             caption: answer.meal,
