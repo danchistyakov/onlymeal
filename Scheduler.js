@@ -20,19 +20,19 @@ exports.Scheduler = async (bot, chatId, dbdata, interval, manual) => {
         Cancel();
 
         const job1 = new CronJob(`00 ${(offset % 3600) / 60} ${10 - Math.floor(offset / 3600)} * * * `, () => {
-            Dish(bot, dbdata, msg);
+            Dish(bot, dbdata, chatId);
         })
 
         job1.start()
 
         const job2 = new CronJob('00 00 14 * * *', () => {
-            Dish(bot, dbdata, msg);
+            Dish(bot, dbdata, chatId);
         })
 
         job2.start()
 
         const job3 = new CronJob('00 00 20 * * *', () => {
-            Dish(bot, dbdata, msg);
+            Dish(bot, dbdata, chatId);
         })
 
         job3.start()
@@ -65,7 +65,7 @@ exports.Scheduler = async (bot, chatId, dbdata, interval, manual) => {
         Cancel();
 
         const job1 = new CronJob('00 00 10 * * *', () => {
-            Dish(bot, dbdata, msg);
+            Dish(bot, dbdata, chatId);
         })
 
         job1.start()
@@ -91,7 +91,7 @@ exports.Scheduler = async (bot, chatId, dbdata, interval, manual) => {
         Cancel();
 
         const job1 = new CronJob('00 00 10 /7 * *', () => {
-            Dish(bot, dbdata, msg);
+            Dish(bot, dbdata, chatId);
         })
 
         job1.start()
