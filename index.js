@@ -1,7 +1,6 @@
 const TelegramApi = require('node-telegram-bot-api');
 const token = process.env.PRODUCTION === 'true' ? '1797063882:AAGUc2f0xS5C7PgAZ8_xINGcA1u6f7wKd_I' : '1757466123:AAHZci-uxpsBBzSVDO-zJLjRuE43c4ODGkc';
 const bot = new TelegramApi(token, { polling: true });
-var CronJob = require('cron').CronJob;
 const { mainKeyboard, geoKeyboard } = require('./keyboards');
 const { handleHateKeyboard, handleMeatKeyboard, handleJunkKeyboard, handleIntervalKeyboard } = require('./handleKeyboards');
 const { Scheduler } = require('./Scheduler');
@@ -133,7 +132,6 @@ const start = async () => {
             const dbdata = (await Preferences.findOne({ chatId: chatId }, 'timezone').exec()).toObject().timezone.offsetRaw;
             const hours = Math.floor(dbdata / 3600);
             const minutes = Math.floor((dbdata % 3600) / 60);
-            console.log(dbdata);
             bot.sendMessage(chatId, `🌐 Текущий часовой пояс: UTC${dbdata > 0 ? '+' : ''}${dbdata < 0 ? '-' : ''}${dbdata === 0 ? '±' : ''}${hours < 10 ? '0' + Math.abs(hours) : Math.abs(hours)}:${minutes === 0 ? Math.abs(minutes) + '0' : Math.abs(minutes)}\n🛠 Укажите ваш часовой пояс в формате ±ЧЧ:ММ.\n🗺 Или отправьте свою геопозицию.`,
                 {
                     parse_mode: "HTML",

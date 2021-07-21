@@ -1,9 +1,8 @@
 require('./models');
 const mongoose = require('mongoose');
 const { rationKeyboard, geoKeyboard } = require('./keyboards');
-const { DishSearch } = require('./dishSearch');
-const { handleHateKeyboard, handleMeatKeyboard, handleJunkKeyboard, handleIntervalKeyboard } = require('./handleKeyboards');
-const { mainKeyboard, UTCKeyboard } = require('./keyboards');
+const { handleMeatKeyboard, handleIntervalKeyboard } = require('./handleKeyboards');
+const { UTCKeyboard } = require('./keyboards');
 const { Dish } = require('./dish');
 const { Timezone } = require('./timezone');
 
@@ -56,7 +55,7 @@ exports.Message = async (bot, msg) => {
     }
 
     if (msg.location !== undefined) {
-        bot.sendMessage(msg.chat.id, `🌐 Ваш часовой пояс: UTC${await Timezone(msg.location.latitude, msg.location.longitude)}`,
+        bot.sendMessage(chatId, `🌐 Ваш часовой пояс: UTC${await Timezone(msg.location.latitude, msg.location.longitude, chatId)}`,
             {
                 parse_mode: "HTML",
                 reply_markup: UTCKeyboard
@@ -66,7 +65,6 @@ exports.Message = async (bot, msg) => {
     if (text.indexOf(':') !== -1 && (text.indexOf('+') !== -1 || text.indexOf('-') !== -1 || text.indexOf('±') !== -1)) {
         const hours = Number(text.slice(0, -3)) * 3600;
         const minutes = Number(text.slice(4)) * 60;
-        console.log('dvoe', hours, minutes);
         await Preferences.findOneAndUpdate({ chatId: chatId }, { timezone: { offsetRaw: hours > 0 ? hours + minutes : hours - minutes, offsetMos: (hours > 0 ? hours + minutes : hours - minutes) - 10800 } });
         bot.sendMessage(msg.chat.id, `🌐 Ваш часовой пояс: UTC${text}`,
             {
