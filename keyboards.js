@@ -16,9 +16,10 @@ module.exports = {
 
     geoKeyboard: JSON.stringify({
         resize_keyboard: true,
+        one_time_keyboard: true,
         keyboard: [
             [{ text: '🗺 Геопозиция', request_location: true }],
-            ['❌ Отмена'],
+            ['❌ Пропустить'],
         ]
     }),
 

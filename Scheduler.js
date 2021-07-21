@@ -6,8 +6,8 @@ const { Cancel } = require('./canceller');
 exports.Scheduler = async (bot, chatId, dbdata, interval, manual) => {
     const date = new Date();
     const months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
-    const offsetRaw = dbdata?.timezone?.offset;
-    const offset = offsetRaw - 10800;
+    const offsetRaw = dbdata?.timezone?.offsetRaw;
+    const offsetMos = dbdata?.timezone?.offsetMos;
 
     if (interval === '3td') {
         if (manual === true) {
@@ -17,9 +17,16 @@ exports.Scheduler = async (bot, chatId, dbdata, interval, manual) => {
                 reply_markup: mainKeyboard,
             });
         }
+
         Cancel();
 
-        const job1 = new CronJob(`00 ${(offset % 3600) / 60} ${10 - Math.floor(offset / 3600)} * * * `, () => {
+        const schdate = new Date();
+        schdate.setHours(10 + Math.floor(offsetMos / 3600))
+        schdate.setMinutes(Math.abs((offsetMos % 3600) / 60))
+        schdate.setSeconds(0)
+        console.log(`0 ${schdate.getMinutes()} ${schdate.getHours()} * * * `);
+
+        const job1 = new CronJob(`0 ${schdate.getMinutes()} ${schdate.getHours()} * * * `, () => {
             Dish(bot, dbdata, chatId);
         })
 

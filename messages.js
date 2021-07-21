@@ -45,7 +45,10 @@ exports.Message = async (bot, msg) => {
     }
 
     if (text === 'Расписание ⏰' || text === 'Расписание') {
-        bot.sendMessage(msg.chat.id, '🌐 Текущий часовой пояс: UTC+03:00\n🛠 Укажите ваш часовой пояс в формате ±ЧЧ:ММ.\n🗺 Или отправьте свою геопозицию.',
+        const dbdata = (await Preferences.findOne({ chatId: chatId }, 'timezone').exec()).toObject().timezone.offsetRaw;
+        const hours = Math.floor(dbdata / 3600);
+        const minutes = Math.floor((dbdata % 3600) / 60);
+        bot.sendMessage(chatId, `🌐 Текущий часовой пояс: UTC${dbdata > 0 ? '+' : ''}${dbdata === 0 ? '±' : ''}${hours < 10 ? '0' + hours : hours}:${minutes === 0 ? minutes + '0' : minutes}\n🛠 Укажите ваш часовой пояс в формате ±ЧЧ:ММ.\n🗺 Или отправьте свою геопозицию.`,
             {
                 parse_mode: "HTML",
                 reply_markup: geoKeyboard
@@ -60,10 +63,11 @@ exports.Message = async (bot, msg) => {
             });
     }
 
-    if (text.indexOf(':') !== -1) {
-        const hours = Number(text.slice(1, -3)) * 3600;
+    if (text.indexOf(':') !== -1 && (text.indexOf('+') !== -1 || text.indexOf('-') !== -1 || text.indexOf('±') !== -1)) {
+        const hours = Number(text.slice(0, -3)) * 3600;
         const minutes = Number(text.slice(4)) * 60;
-        await Preferences.findOneAndUpdate({ chatId: chatId }, { timezone: { offset: hours + minutes, timeZoneId: null } });
+        console.log('dvoe', hours, minutes);
+        await Preferences.findOneAndUpdate({ chatId: chatId }, { timezone: { offsetRaw: hours > 0 ? hours + minutes : hours - minutes, offsetMos: (hours > 0 ? hours + minutes : hours - minutes) - 10800 } });
         bot.sendMessage(msg.chat.id, `🌐 Ваш часовой пояс: UTC${text}`,
             {
                 parse_mode: "HTML",
@@ -71,14 +75,14 @@ exports.Message = async (bot, msg) => {
             });
     }
 
-    /*if (text === 'Распиание ⏰') {
+    if (text === '❌ Пропустить') {
         const dbdata = (await Preferences.findOne({ chatId: chatId }, 'interval').exec()).toObject()?.interval;
         bot.sendPhoto(chatId, 'https://cdn.statically.io/img/tangerine.gq/q=91/onlymeal/schedule.jpg',
             {
                 caption: 'Хорошо, как часто мы будем выдавать тебе наши замечательные рецепты и идеи?',
                 reply_markup: handleIntervalKeyboard(dbdata),
-                });
-    }*/
+            });
+    }
 
     if (text === 'Блюдо прямо сейчас! 😋') {
         const dbdata = (await Preferences.findOne({ chatId: chatId }).exec())?.toObject();

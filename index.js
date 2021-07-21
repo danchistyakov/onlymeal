@@ -9,7 +9,6 @@ const { Dish } = require('./dish');
 const { sendRating } = require('./sendRating');
 const { Message } = require('./messages');
 const { Cancel } = require('./canceller');
-const { Timezone } = require('./timezone');
 const { initScheduler } = require('./initScheduler');
 
 require('./models');
@@ -45,7 +44,7 @@ const start = async () => {
         }
     })
 
-    initScheduler(bot);
+    process.env.PRODUCTION === 'true' && initScheduler(bot);
 
     bot.setMyCommands([
         { command: '/start', description: 'Начальное приветствие' },
@@ -130,7 +129,19 @@ const start = async () => {
             bot.editMessageReplyMarkup(handleJunkKeyboard(data.slice(4)), { message_id: messageId, chat_id: chatId })
         }
 
-        if (['intervalNext', 'hateNext'].includes(data)) {
+        if (data === 'hateNext') {
+            const dbdata = (await Preferences.findOne({ chatId: chatId }, 'timezone').exec()).toObject().timezone.offsetRaw;
+            const hours = Math.floor(dbdata / 3600);
+            const minutes = Math.floor((dbdata % 3600) / 60);
+            console.log(dbdata);
+            bot.sendMessage(chatId, `🌐 Текущий часовой пояс: UTC${dbdata > 0 ? '+' : ''}${dbdata < 0 ? '-' : ''}${dbdata === 0 ? '±' : ''}${hours < 10 ? '0' + Math.abs(hours) : Math.abs(hours)}:${minutes === 0 ? Math.abs(minutes) + '0' : Math.abs(minutes)}\n🛠 Укажите ваш часовой пояс в формате ±ЧЧ:ММ.\n🗺 Или отправьте свою геопозицию.`,
+                {
+                    parse_mode: "HTML",
+                    reply_markup: geoKeyboard
+                });
+        }
+
+        if (['intervalNext'].includes(data)) {
             bot.sendPhoto(chatId, 'https://cdn.statically.io/img/tangerine.gq/q=91/onlymeal/schedule.jpg',
                 {
                     caption: 'Хорошо, как часто мы будем выдавать тебе наши замечательные рецепты и идеи?',
