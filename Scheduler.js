@@ -24,6 +24,7 @@ exports.Scheduler = async (bot, chatId, dbdata, interval, manual) => {
         schdate.setHours(10 + Math.floor(offsetMos / 3600));
         schdate.setMinutes(Math.abs((offsetMos % 3600) / 60));
         schdate.setSeconds(0);
+        console.log(`CRONTIME: 0 ${schdate.getMinutes()} ${schdate.getHours()} * * * `);
 
         const job1 = new CronJob(`0 ${schdate.getMinutes()} ${schdate.getHours()} * * * `, () => {
             Dish(bot, dbdata, chatId);
@@ -34,6 +35,7 @@ exports.Scheduler = async (bot, chatId, dbdata, interval, manual) => {
         schdate.setHours(14 + Math.floor(offsetMos / 3600));
         schdate.setMinutes(Math.abs((offsetMos % 3600) / 60));
         schdate.setSeconds(0);
+        console.log(`CRONTIME: 0 ${schdate.getMinutes()} ${schdate.getHours()} * * * `);
 
         const job2 = new CronJob(`0 ${schdate.getMinutes()} ${schdate.getHours()} * * *`, () => {
             Dish(bot, dbdata, chatId);
@@ -44,6 +46,7 @@ exports.Scheduler = async (bot, chatId, dbdata, interval, manual) => {
         schdate.setHours(20 + Math.floor(offsetMos / 3600));
         schdate.setMinutes(Math.abs((offsetMos % 3600) / 60));
         schdate.setSeconds(0);
+        console.log(`CRONTIME: 0 ${schdate.getMinutes()} ${schdate.getHours()} * * * `);
 
         const job3 = new CronJob(`0 ${schdate.getMinutes()} ${schdate.getHours()} * * *`, () => {
             Dish(bot, dbdata, chatId);
@@ -81,6 +84,7 @@ exports.Scheduler = async (bot, chatId, dbdata, interval, manual) => {
         schdate.setHours(10 + Math.floor(offsetMos / 3600));
         schdate.setMinutes(Math.abs((offsetMos % 3600) / 60));
         schdate.setSeconds(0);
+        console.log(`CRONTIME: 0 ${schdate.getMinutes()} ${schdate.getHours()} * * * `);
 
         const job1 = new CronJob(`0 ${schdate.getMinutes()} ${schdate.getHours()} * * *`, () => {
             Dish(bot, dbdata, chatId);
@@ -112,6 +116,7 @@ exports.Scheduler = async (bot, chatId, dbdata, interval, manual) => {
         schdate.setHours(10 + Math.floor(offsetMos / 3600));
         schdate.setMinutes(Math.abs((offsetMos % 3600) / 60));
         schdate.setSeconds(0);
+        console.log(`CRONTIME: 0 ${schdate.getMinutes()} ${schdate.getHours()} * * * `);
 
         const job1 = new CronJob(`0 ${schdate.getMinutes()} ${schdate.getHours()} /7 * *`, () => {
             Dish(bot, dbdata, chatId);
