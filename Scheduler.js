@@ -27,6 +27,7 @@ exports.Scheduler = async (bot, chatId, dbdata, interval, manual) => {
         console.log(`CRONTIME: 0 ${schdate.getMinutes()} ${schdate.getHours()} * * * `);
 
         const job1 = new CronJob(`0 ${schdate.getMinutes()} ${schdate.getHours()} * * * `, () => {
+            console.log(`CRONTIMEEXEC: 0 ${schdate.getMinutes()} ${schdate.getHours()} * * * `);
             Dish(bot, dbdata, chatId);
         });
 
@@ -38,6 +39,7 @@ exports.Scheduler = async (bot, chatId, dbdata, interval, manual) => {
         console.log(`CRONTIME: 0 ${schdate.getMinutes()} ${schdate.getHours()} * * * `);
 
         const job2 = new CronJob(`0 ${schdate.getMinutes()} ${schdate.getHours()} * * *`, () => {
+            console.log(`CRONTIMEEXEC: 0 ${schdate.getMinutes()} ${schdate.getHours()} * * * `);
             Dish(bot, dbdata, chatId);
         });
 
@@ -49,6 +51,7 @@ exports.Scheduler = async (bot, chatId, dbdata, interval, manual) => {
         console.log(`CRONTIME: 0 ${schdate.getMinutes()} ${schdate.getHours()} * * * `);
 
         const job3 = new CronJob(`0 ${schdate.getMinutes()} ${schdate.getHours()} * * *`, () => {
+            console.log(`CRONTIMEEXEC: 0 ${schdate.getMinutes()} ${schdate.getHours()} * * * `);
             Dish(bot, dbdata, chatId);
         });
 
