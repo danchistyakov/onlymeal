@@ -1,7 +1,7 @@
 const { google } = require('googleapis');
-const keys = require('../keys.json');
+const keys = require('./keys.json');
 const mongoose = require('mongoose');
-require('../models');
+require('./models');
 const Preferences = mongoose.model('preferences');
 const MONGODB_URI = 'mongodb+srv://onlymeal:qfGjhhjkmrJ1@onlymeal.wj7vo.mongodb.net/onlymeal?retryWrites=true&w=majority';
 
