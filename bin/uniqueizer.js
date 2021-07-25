@@ -60,4 +60,6 @@ const Uniqueizer = async () => {
     })
 }
 
+console.log('uniqueized');
+
 Uniqueizer();
