@@ -30,7 +30,8 @@ const PreferencesSchema = mongoose.Schema({
     timezone: {
         offsetRaw: { type: Number, required: true, default: 10800 },
         offsetMos: { type: Number, required: true, default: 0 },
-    }
+    },
+    dishesId: { type: Array, required: true, default: [] }
 })
 
 PreferencesSchema.plugin(uniqueValidator);

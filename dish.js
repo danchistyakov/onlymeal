@@ -2,7 +2,7 @@ const { DishSearch } = require('./dishSearch');
 const { mainKeyboard } = require('./keyboards');
 
 exports.Dish = async (bot, dbdata, chatId) => {
-    const answer = await DishSearch(dbdata?.hate, dbdata?.meat, dbdata?.junk);
+    const answer = await DishSearch(dbdata?.hate, dbdata?.meat, dbdata?.junk, chatId);
 
     if (answer !== 'К сожалению, на данный момент по Вашим фильтрам мы ничего не можем Вам предложить 😔') {
         bot.sendPhoto(chatId, answer.image, {
