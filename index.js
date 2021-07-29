@@ -53,10 +53,9 @@ const start = async () => {
         try {
             await new Preferences({ chatId: msg.chat.id }).save();
         } catch (err) {
-            console.log('Existing user')
+            console.log('Existing user');
         }
-        Message(bot, msg)
-
+        return Message(bot, msg);
     });
 
     //return bot.sendMessage(chatId, 'Извините, непонятно', { parse_mode: "HTML" });
