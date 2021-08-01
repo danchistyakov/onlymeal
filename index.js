@@ -9,6 +9,7 @@ const { sendRating } = require('./sendRating');
 const { Message } = require('./messages');
 const { Cancel } = require('./canceller');
 const { initScheduler } = require('./initScheduler');
+const { initDishes } = require('./initDishes');
 
 require('./models');
 //const Amplitude = require('@amplitude/node');
@@ -52,6 +53,7 @@ const start = async () => {
     bot.on('message', async msg => {
         try {
             await new Preferences({ chatId: msg.chat.id }).save();
+            initDishes(msg.chat.id);
         } catch (err) {
             console.log('Existing user');
         }
