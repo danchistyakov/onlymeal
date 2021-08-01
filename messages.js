@@ -5,31 +5,19 @@ const { handleMeatKeyboard, handleIntervalKeyboard } = require('./handleKeyboard
 const { UTCKeyboard } = require('./keyboards');
 const { Dish } = require('./dish');
 const { Timezone } = require('./timezone');
+const Preferences = mongoose.model('preferences');
 
 exports.Message = async (bot, msg) => {
-    const Preferences = mongoose.model('preferences');
     const chatId = msg.chat.id;
     const text = msg.text;
-    if (text === '/start') {
-        const startSession = async () => {
-            try {
-                return bot.sendPhoto(chatId, 'https://cdn.statically.io/img/tangerine.gq/q=91/onlymeal/start.jpg',
-                    {
-                        caption: '<b>Привет, на связи OnlyMeal</b>\nЭто проект созданный решать простую задачу и спасать людей от мучений выбора еды.',
-                        reply_markup: rationKeyboard,
-                        parse_mode: "HTML",
-                    });
-            } catch (err) {
-                console.log(' '); console.log('Ошибка!'); console.log(' '); console.log(err);
-                return bot.sendPhoto(chatId, 'https://ik.imagekit.io/onlymeal/Frame_26options_zMmm82QbF.png',
-                    {
-                        caption: `<b>Произошла ошибка!</b>\nОписание ошибки:\n ${err}`,
-                        parse_mode: "HTML",
-                    });
-            }
-        }
 
-        startSession();
+    if (text === '/start') {
+        return bot.sendPhoto(chatId, 'https://cdn.statically.io/img/tangerine.gq/q=91/onlymeal/start.jpg',
+            {
+                caption: '<b>Привет, на связи OnlyMeal</b>\nЭто проект созданный решать простую задачу и спасать людей от мучений выбора еды.',
+                reply_markup: rationKeyboard,
+                parse_mode: "HTML",
+            });
     }
 
     if (text === 'Рацион') {

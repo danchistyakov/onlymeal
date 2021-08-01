@@ -1,4 +1,4 @@
-var CronJob = require('cron').CronJob;
+const schedule = require('node-schedule');
 const { mainKeyboard } = require('./keyboards');
 const { Dish } = require('./dish');
 const { Cancel } = require('./canceller');
@@ -26,36 +26,30 @@ exports.Scheduler = async (bot, chatId, dbdata, interval, manual) => {
         schdate.setSeconds(0);
         console.log(`CRONTIME: 0 ${schdate.getMinutes()} ${schdate.getHours()} * * * `);
 
-        const job1 = new CronJob(`0 ${schdate.getMinutes()} ${schdate.getHours()} * * * `, () => {
+        schedule.scheduleJob(`0 ${schdate.getMinutes()} ${schdate.getHours()} * * * `, () => {
             console.log(`CRONTIMEEXEC: 0 ${schdate.getMinutes()} ${schdate.getHours()} * * * `);
             Dish(bot, dbdata, chatId);
         });
-
-        job1.start();
 
         schdate.setHours(14 + Math.floor(offsetMos / 3600));
         schdate.setMinutes(Math.abs((offsetMos % 3600) / 60));
         schdate.setSeconds(0);
         console.log(`CRONTIME: 0 ${schdate.getMinutes()} ${schdate.getHours()} * * * `);
 
-        const job2 = new CronJob(`0 ${schdate.getMinutes()} ${schdate.getHours()} * * *`, () => {
+        schedule.scheduleJob(`0 ${schdate.getMinutes()} ${schdate.getHours()} * * *`, () => {
             console.log(`CRONTIMEEXEC: 0 ${schdate.getMinutes()} ${schdate.getHours()} * * * `);
             Dish(bot, dbdata, chatId);
         });
-
-        job2.start();
 
         schdate.setHours(20 + Math.floor(offsetMos / 3600));
         schdate.setMinutes(Math.abs((offsetMos % 3600) / 60));
         schdate.setSeconds(0);
         console.log(`CRONTIME: 0 ${schdate.getMinutes()} ${schdate.getHours()} * * * `);
 
-        const job3 = new CronJob(`0 ${schdate.getMinutes()} ${schdate.getHours()} * * *`, () => {
+        schedule.scheduleJob(`0 ${schdate.getMinutes()} ${schdate.getHours()} * * *`, () => {
             console.log(`CRONTIMEEXEC: 0 ${schdate.getMinutes()} ${schdate.getHours()} * * * `);
             Dish(bot, dbdata, chatId);
         });
-
-        job3.start();
 
         if (manual === true) {
             if (date.getHours() + Math.floor(offsetMos / 3600) > 19 || date.getHours() + Math.floor(offsetMos / 3600) < 10) {
@@ -89,11 +83,9 @@ exports.Scheduler = async (bot, chatId, dbdata, interval, manual) => {
         schdate.setSeconds(0);
         console.log(`CRONTIME: 0 ${schdate.getMinutes()} ${schdate.getHours()} * * * `);
 
-        const job1 = new CronJob(`0 ${schdate.getMinutes()} ${schdate.getHours()} * * *`, () => {
+        schedule.scheduleJob(`0 ${schdate.getMinutes()} ${schdate.getHours()} * * *`, () => {
             Dish(bot, dbdata, chatId);
         });
-
-        job1.start();
 
         if (manual === true) {
             if (date.getHours() + Math.floor(offsetMos / 3600) > 10) {
@@ -121,11 +113,9 @@ exports.Scheduler = async (bot, chatId, dbdata, interval, manual) => {
         schdate.setSeconds(0);
         console.log(`CRONTIME: 0 ${schdate.getMinutes()} ${schdate.getHours()} * * * `);
 
-        const job1 = new CronJob(`0 ${schdate.getMinutes()} ${schdate.getHours()} /7 * *`, () => {
+        schedule.scheduleJob(`0 ${schdate.getMinutes()} ${schdate.getHours()} /7 * *`, () => {
             Dish(bot, dbdata, chatId);
         });
-
-        job1.start();
 
         date.setDate(date.getDate() + 7);
 

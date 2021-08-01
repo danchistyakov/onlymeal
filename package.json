@@ -1,6 +1,6 @@
 {
     "name": "telegram-bot",
-    "version": "0.0.1",
+    "version": "0.2.7",
     "description": "",
     "main": "index.js",
     "scripts": {
@@ -10,16 +10,11 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@amplitude/node": "^1.6.1",
         "axios": "^0.21.1",
-        "cron": "^1.8.2",
         "googleapis": "^76.0.0",
         "mongoose": "^5.13.0",
         "mongoose-unique-validator": "^2.0.3",
         "node-schedule": "^2.0.0",
-        "node-telegram-bot-api": "^0.53.0",
-        "pg": "^8.6.0",
-        "pg-hstore": "^2.3.4",
-        "sequelize": "^6.6.2"
+        "node-telegram-bot-api": "^0.53.0"
     }
 }
