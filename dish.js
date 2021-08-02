@@ -16,6 +16,7 @@ exports.Dish = async (bot, dbdata, chatId) => {
             }
         });
     } catch (err) {
+        console.log(err)
         bot.sendPhoto(chatId, 'https://ik.imagekit.io/onlymeal/Frame_26options_zMmm82QbF.png', {
             caption: 'К сожалению, на данный момент по Вашим фильтрам мы ничего не можем Вам предложить 😔',
             reply_markup:
