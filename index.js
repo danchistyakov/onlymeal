@@ -71,17 +71,17 @@ const start = async () => {
         const chatId = msg.message.chat.id;
         const messageId = msg.message.message_id;
         const dbdata = (await Preferences.findOne({ chatId: chatId }).exec()).toObject();
-        hate = hate === undefined ? dbdata?.hate : hate;
-        meat = meat === undefined ? dbdata?.meat : meat;
-        junk = junk === undefined ? dbdata?.junk : junk;
-        interval = interval === undefined ? dbdata?.interval : interval;
+        hate = hate === undefined ? dbdata.hate : hate;
+        meat = meat === undefined ? dbdata.meat : meat;
+        junk = junk === undefined ? dbdata.junk : junk;
+        interval = interval === undefined ? dbdata.interval : interval;
 
         if (data === 'setRation' || data === 'hateBack') {
             bot.sendPhoto(chatId, 'https://cdn.statically.io/img/tangerine.gq/q=91/onlymeal/dislike.jpg',
                 {
                     caption: '<b>Личные предпочтения</b>\nРасскажи о своих предпочтениях в пище. Может есть что-то, что тебе нельзя (отметь эти категории).',
                     parse_mode: "HTML",
-                    reply_markup: handleHateKeyboard(hate),
+                    reply_markup: handleHateKeyboard(dbdata.hate),
                 });
         }
 
@@ -96,7 +96,7 @@ const start = async () => {
                 {
                     parse_mode: "HTML",
                     caption: '<b>Мясо</b>\nМожет есть что-то, что тебе нельзя (отметь эти категории)',
-                    reply_markup: handleMeatKeyboard(meat),
+                    reply_markup: handleMeatKeyboard(dbdata.meat),
                 });
         }
 
@@ -126,7 +126,7 @@ const start = async () => {
                 await Preferences.findOneAndUpdate({ chatId: chatId }, { junk: false });
             }
 
-            bot.editMessageReplyMarkup(handleJunkKeyboard(data.slice(4)), { message_id: messageId, chat_id: chatId })
+            bot.editMessageReplyMarkup(handleJunkKeyboard(data.slice(4)), { message_id: messageId, chat_id: chatId });
         }
 
         if (data === 'hateNext') {
@@ -155,7 +155,7 @@ const start = async () => {
         }
 
         if (data === 'intervalConfirm' && interval !== 'button') {
-            Scheduler(bot, chatId, dbdata, interval, true);
+            Scheduler(bot, chatId, dbdata, interval, true, false);
         }
 
         if (data === 'intervalConfirm' && interval === 'button') {
@@ -168,13 +168,13 @@ const start = async () => {
         }
 
         if (data.indexOf('handleRate') !== -1) {
-            const key = Number(data.slice(10));
+            const id = Number(data.slice(10));
             bot.sendMessage(chatId, 'Как тебе было это блюдо?', {
                 reply_markup:
                 {
                     mainKeyboard,
                     inline_keyboard: [
-                        [{ text: '😩', callback_data: 'handleRating' + key + 1 }, { text: '😟', callback_data: 'handleRating' + key + 2 }, { text: '😬', callback_data: 'handleRating' + key + 3 }, { text: '😎', callback_data: 'handleRating' + key + 4 }, { text: '😍', callback_data: 'handleRating' + key + 5 }]
+                        [{ text: '😩', callback_data: 'handleRating' + id + 1 }, { text: '😟', callback_data: 'handleRating' + id + 2 }, { text: '😬', callback_data: 'handleRating' + id + 3 }, { text: '😎', callback_data: 'handleRating' + id + 4 }, { text: '😍', callback_data: 'handleRating' + id + 5 }]
                     ]
                 }
             })
@@ -183,10 +183,15 @@ const start = async () => {
         if (data.indexOf('handleRating') !== -1) {
             const rate = Number(data.slice(-1));
             const key = Number(data.slice(12, -1)) + 1;
-            sendRating(rate, key)
-            bot.sendMessage(chatId, 'Спасибо за отзыв!', {
+            console.log('RATE: ' + rate);
+            console.log('KEY: ' + key);
+            sendRating(rate, key);
+
+            await bot.sendMessage(chatId, 'Спасибо, мы поняли ✅', {
                 reply_markup: mainKeyboard,
-            })
+            });
+
+            Scheduler(bot, chatId, dbdata, dbdata.interval, true, true);
         }
     })
 }

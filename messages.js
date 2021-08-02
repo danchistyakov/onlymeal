@@ -21,7 +21,7 @@ exports.Message = async (bot, msg) => {
     }
 
     if (text === 'Рацион') {
-        const dbdata = (await Preferences.findOne({ chatId: chatId }, 'meat').exec()).toObject()?.meat;
+        const dbdata = (await Preferences.findOne({ chatId: chatId }, 'meat').exec()).toObject().meat;
         console.log(dbdata)
         return bot.sendPhoto(chatId, 'https://cdn.statically.io/img/tangerine.gq/q=91/onlymeal/dislike.jpg',
             {
@@ -62,7 +62,7 @@ exports.Message = async (bot, msg) => {
     }
 
     if (text === '❌ Пропустить') {
-        const dbdata = (await Preferences.findOne({ chatId: chatId }, 'interval').exec()).toObject()?.interval;
+        const dbdata = (await Preferences.findOne({ chatId: chatId }, 'interval').exec()).toObject().interval;
         return bot.sendPhoto(chatId, 'https://cdn.statically.io/img/tangerine.gq/q=91/onlymeal/schedule.jpg',
             {
                 caption: 'Хорошо, как часто мы будем выдавать тебе наши замечательные рецепты и идеи?',
@@ -71,7 +71,7 @@ exports.Message = async (bot, msg) => {
     }
 
     if (text === 'Блюдо прямо сейчас! 😋') {
-        const dbdata = (await Preferences.findOne({ chatId: chatId }).exec())?.toObject();
+        const dbdata = (await Preferences.findOne({ chatId: chatId }).exec()).toObject();
         return Dish(bot, dbdata, chatId);
     }
     return bot.sendMessage(chatId, `Извините непонятно`);

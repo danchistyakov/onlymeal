@@ -2,15 +2,16 @@ const { DishSearch } = require('./dishSearch');
 const { mainKeyboard } = require('./keyboards');
 
 exports.Dish = async (bot, dbdata, chatId) => {
-    const answer = await DishSearch(dbdata?.hate, dbdata?.meat, dbdata?.junk, chatId);
+    const answer = await DishSearch(dbdata, chatId);
     try {
         bot.sendPhoto(chatId, answer.image, {
-            caption: answer.meal,
+            caption: `<b>${answer.meal}</b>\n\nПриятного аппетита! ☺️`,
+            parse_mode: "HTML",
             reply_markup:
             {
                 mainKeyboard,
                 inline_keyboard: [
-                    [{ text: 'Съедено ✨', callback_data: 'handleRate' + answer.key }],
+                    [{ text: 'Съедено ✨', callback_data: 'handleRate' + answer.id }],
                 ]
             }
         });

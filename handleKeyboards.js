@@ -15,7 +15,7 @@ exports.handleHateKeyboard = (items) => {
             const bool = items[index];
             if (keyboard.length - key !== 1) {
                 return item.map(item => {
-                    return bool ? { text: item?.text + ' ❌', callback_data: 'hate' + index } : { text: item?.text, callback_data: 'hate' + index }
+                    return bool ? { text: item.text + ' ❌', callback_data: 'hate' + index } : { text: item.text, callback_data: 'hate' + index }
                 })
             } else {
                 return [{ text: '➡️ Далее', callback_data: 'hateMeat' }]
@@ -40,10 +40,10 @@ exports.handleMeatKeyboard = (items) => {
             const bool = items[index];
             if (keyboard.length - key > 2) {
                 return item.map(item => {
-                    return bool ? { text: item?.text + ' ❌', callback_data: 'hate' + index } : { text: item?.text, callback_data: 'hate' + index }
+                    return bool ? { text: item.text + ' ❌', callback_data: 'hate' + index } : { text: item.text, callback_data: 'hate' + index }
                 })
             } else {
-                return [{ text: item[0]?.text, callback_data: item[0]?.callback_data }]
+                return [{ text: item[0].text, callback_data: item[0].callback_data }]
             }
         })
     }
@@ -62,9 +62,9 @@ exports.handleJunkKeyboard = (junk) => {
     /*return {
         inline_keyboard: keyboard.map((item, key) => {
             if (keyboard.length - key > 2) {
-                return junk === item[0]?.callback_data ? [{ text: item[0]?.text + ' ✅', callback_data: 'junk' + item[0]?.callback_data }] : [{ text: item[0]?.text, callback_data: 'junk' + item[0]?.callback_data }]
+                return junk === item[0].callback_data ? [{ text: item[0].text + ' ✅', callback_data: 'junk' + item[0].callback_data }] : [{ text: item[0].text, callback_data: 'junk' + item[0].callback_data }]
             } else {
-                return [{ text: item[0]?.text, callback_data: item[0]?.callback_data }]
+                return [{ text: item[0].text, callback_data: item[0].callback_data }]
             }
         })
     }*/

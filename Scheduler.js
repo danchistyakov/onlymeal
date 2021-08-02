@@ -3,15 +3,14 @@ const { mainKeyboard } = require('./keyboards');
 const { Dish } = require('./dish');
 const { Cancel } = require('./canceller');
 
-exports.Scheduler = async (bot, chatId, dbdata, interval, manual) => {
+exports.Scheduler = async (bot, chatId, dbdata, interval, manual, otzyv) => {
     const date = new Date();
     const months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
-    const offsetRaw = dbdata?.timezone?.offsetRaw;
-    const offsetMos = dbdata?.timezone?.offsetMos;
+    const offsetMos = dbdata.timezone.offsetMos;
     const schdate = new Date();
 
     if (interval === '3td') {
-        if (manual === true) {
+        if (manual === true && !otzyv) {
             await bot.sendPhoto(chatId, 'https://cdn.statically.io/img/tangerine.gq/q=91/onlymeal/3td.jpg', {
                 caption: '<b>3 раза в день</b> ✅\nИменно столько раз мы будем присылать тебе что поесть!',
                 parse_mode: "HTML",

@@ -5,8 +5,8 @@ const mongoose = require('mongoose');
 require('./models');
 const Preferences = mongoose.model('preferences');
 
-exports.DishSearch = async (hate, meat, junk, chatId) => {
-    const filters = Object.assign(hate, meat, junk);
+exports.DishSearch = async (dbdata, chatId) => {
+    const filters = Object.assign(dbdata.hate, dbdata.meat, dbdata.junk);
     const client = new google.auth.JWT(
         keys.client_email, null, keys.private_key, ['https://www.googleapis.com/auth/spreadsheets']
     );
