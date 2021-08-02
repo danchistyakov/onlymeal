@@ -35,15 +35,17 @@ exports.DishSearch = async (dbdata, chatId) => {
         filters.chicken && filterArrHate.push('CHI');
         filters.mutton && filterArrHate.push('MUT');
         filters.junk && filterArrHate.push('BRG');
+        //console.log(images)
         const filtered = meals.filter((res, key) => {
             const tagarr = tags[key][0].split(' ');
             const hate = filterArrHate.some(f => tagarr.includes(f));
             if (hate === false) {
                 return res
             }
-        }).map((res, key) => (
-            { meal: res[0], id: meals.indexOf(res) + 1, image: images[meals.indexOf(res)][0] }
-        ))
+        }).map((res, key) => {
+            console.log(images[meals.indexOf(res)][0]);
+            return { meal: res[0], id: meals.indexOf(res) + 1, image: images[meals.indexOf(res)][0] }
+        })
         const vacant = (await Preferences.findOne({ chatId: chatId }, 'dishesId').exec()).toObject().dishesId;
         const rand = Math.floor(Math.random() * vacant.length);
         const result = filtered.find(item => item.id === vacant[rand]);

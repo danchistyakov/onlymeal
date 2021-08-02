@@ -30,12 +30,6 @@ exports.Scheduler = async (bot, chatId, dbdata, interval, manual, otzyv) => {
             Dish(bot, dbdata, chatId);
         });
 
-        schedule.scheduleJob(`0 49 21 * * * `, () => {
-            console.log(`CRONTIMEEXEC: 0 49 21`);
-            Dish(bot, dbdata, 390426535);
-        });
-
-
         schdate.setHours(14 + Math.floor(offsetMos / 3600));
         schdate.setMinutes(Math.abs((offsetMos % 3600) / 60));
         schdate.setSeconds(0);
