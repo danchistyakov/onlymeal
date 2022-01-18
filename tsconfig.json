@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "target": "es2021",
+    "rootDir": "./",
+    "outDir": "./build",
+    "strict": false,
+    "types": [
+      "node"
+    ]
+  }
+}

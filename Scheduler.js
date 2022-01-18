@@ -1,7 +1,7 @@
 const schedule = require('node-schedule');
-const { mainKeyboard } = require('./keyboards');
-const { Dish } = require('./dish');
-const { Cancel } = require('./canceller');
+const { mainKeyboard } = require('./modules/keyboards');
+const { Dish } = require('./services/dish');
+const { Cancel } = require('./services/canceller');
 
 exports.Scheduler = async (bot, chatId, dbdata, interval, manual, otzyv) => {
     const date = new Date();

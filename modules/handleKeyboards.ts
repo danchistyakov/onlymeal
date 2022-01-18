@@ -1,4 +1,4 @@
-exports.handleHateKeyboard = (items) => {
+export const handleHateKeyboard = (items) => {
     const keyboard = [
         [{ text: '🥛 Молоко', callback_data: 'hatemilk' }],
         [{ text: '🍍 Фрукты', callback_data: 'hatefruits' }],
@@ -24,7 +24,7 @@ exports.handleHateKeyboard = (items) => {
     }
 }
 
-exports.handleMeatKeyboard = (items) => {
+export const handleMeatKeyboard = (items) => {
     const keyboard = [
         [{ text: 'Свинина', callback_data: 'hatepork' }],
         [{ text: 'Говядина', callback_data: 'hatebeef' }],
@@ -49,7 +49,7 @@ exports.handleMeatKeyboard = (items) => {
     }
 }
 
-exports.handleJunkKeyboard = (junk) => {
+export const handleJunkKeyboard = (junk) => {
     return {
         inline_keyboard: [
             junk === 'yes' ? [{ text: 'Да ✅', callback_data: 'junkyes' }] : [{ text: 'Да', callback_data: 'junkyes' }],
@@ -70,7 +70,7 @@ exports.handleJunkKeyboard = (junk) => {
     }*/
 }
 
-exports.handleIntervalKeyboard = (data) => {
+export const handleIntervalKeyboard = (data) => {
     return {
         inline_keyboard: [
             data === '3td' ? [{ text: 'Хочу 3 раза в день ✅', callback_data: '3td' }] : [{ text: 'Хочу 3 раза в день', callback_data: '3td' }],
