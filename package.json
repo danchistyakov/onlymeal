@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node build/index.js",
     "postinstall": "tsc",
+    "heroku-postbuild": "npm run build",
     "watch-node": "nodemon build/index.js",
     "watch-ts": "tsc -w"
   },
